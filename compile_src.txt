@@ -1,0 +1,70 @@
+#!/bin/bash
+
+export PROJECTNAME="."
+
+
+echo "the project location is : $PROJECTNAME"
+echo "removing libs"
+vdel -lib $PROJECTNAME/LIB/LIB_RTL -all
+vdel -lib $PROJECTNAME/LIB/LIB_BENCH -all
+
+echo "creating library "
+
+vlib $PROJECTNAME/LIB/LIB_RTL
+vmap LIB_RTL $PROJECTNAME/LIB/LIB_RTL
+vlib $PROJECTNAME/LIB/LIB_BENCH
+vmap LIB_BENCH $PROJECTNAME/LIB/LIB_BENCH
+
+# compilation des fichiers sources
+echo "compile vhdl sources"
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ascon_pack.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ascon_pack.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/sbox.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/sbox.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pc.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pc.sv 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pc.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ps.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ps.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pl.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pl.sv 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/pc.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/register_w_en.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/register_w_en.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/register128.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/register128.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/xor_begin.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/xor_begin.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/xor_end.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/xor_end.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/permutation_inter.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/permutation_inter.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/permutation_finale.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/permutation_finale.sv 
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/fsm.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/fsm.sv
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/compteur_double_init.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/compteur_double_init.sv  
+echo "vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ascon_top.sv" 
+ vlog -sv +acc -svinputport=net -work LIB_RTL $PROJECTNAME/SRC/RTL/ascon_top.sv  
+
+
+# Compilation des fichiers TB
+echo "compile vhdl test bench"
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/pc_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/ps_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/pl_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/permutation_inter_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/permutation_finale_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/ascon_top_tb.sv
+vlog -sv +acc -svinputport=net -L LIB_RTL -work LIB_BENCH $PROJECTNAME/SRC/BENCH/ascon_top_tb.sv
+
+
+# lancement du simulateur
+echo "compilation finished"
+echo "start simulation..."
+
+# ATTENTION un seul VSIM decommenté à la fois!
+vsim -L LIB_RTL LIB_BENCH.ascon_top_tb
+
+
