@@ -29,9 +29,7 @@ The module takes as input the **key**, **nonce**, and **plaintext**, and outputs
 
 ##  FSM Description
 
-The FSM manages the full encryption sequence:
-- **idle_tc1 → config_tc1 → end_config_tc1 → tc1 → end_tc1 → tc2 → finalization**
-
+The FSM manages the full encryption sequence.
 Each state activates control signals (permutation start, XOR enable, register write) to ensure synchronization with the system clock.
 
 Although a **block counter** was planned to manage multi-block messages, it was not implemented due to time constraints.  
